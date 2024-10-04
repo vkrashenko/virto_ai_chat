@@ -1,5 +1,5 @@
-from backend.chainlit.message import AskUserMessage, Message
-from chainlit import on_chat_start
+
+from chainlit import AskUserMessage, Message, on_chat_start
 
 @on_chat_start
 async def main():

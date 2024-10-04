@@ -27,7 +27,7 @@ const Header = memo(() => {
   const isMobile = useMediaQuery('(max-width:66rem)');
 
   const { audioConnection } = useAudio();
-  const { displayAvatar, isChatHistoryOpen} = useRecoilValue(settingsState);
+  const { displayMobileMenu, displayAvatar, isChatHistoryOpen} = useRecoilValue(settingsState);
 
   return (
     <Box
@@ -66,7 +66,7 @@ const Header = memo(() => {
         <ChatProfiles />
       </Box>
       <Box display="flex" flexDirection="column" alignItems="flex-start">
-        {isMobile ? (
+        {isMobile && displayMobileMenu ? (
           <OpenSideBarMobileButton />
         ) : isChatHistoryOpen ? null : (
           <Box flexDirection="column" alignItems="flex-start" display="flex">
