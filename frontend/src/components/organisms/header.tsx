@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { useRecoilValue } from 'recoil';
 
-import { Box, Stack } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 import { useAudio } from '@chainlit/react-client';
@@ -15,11 +15,19 @@ import { settingsState } from 'state/settings';
 
 import AudioPresence from './chat/inputBox/AudioPresence';
 import { OpenSideBarMobileButton } from './sidebar/OpenSideBarMobileButton';
+import Translator from 'components/i18n/Translator';
 
 const Header = memo(() => {
-  const isMobile = useMediaQuery('(max-width: 66rem)');
+  const headerTextLeft = (
+    <Translator path="components.organisms.header.text-left" />
+  );
+  const headerTextRight = (
+    <Translator path="components.organisms.header.text-right" />
+  );
+  const isMobile = useMediaQuery('(max-width:66rem)');
+
   const { audioConnection } = useAudio();
-  const { isChatHistoryOpen } = useRecoilValue(settingsState);
+  const { displayMobileMenu, displayAvatar, isChatHistoryOpen} = useRecoilValue(settingsState);
 
   return (
     <Box
@@ -46,7 +54,7 @@ const Header = memo(() => {
           gap: 1
         }}
       >
-        {audioConnection === 'on' ? (
+          {audioConnection === 'on' ? (
           <AudioPresence
             type="server"
             height={35}
@@ -57,16 +65,27 @@ const Header = memo(() => {
         ) : null}
         <ChatProfiles />
       </Box>
-      {isMobile ? (
-        <OpenSideBarMobileButton />
-      ) : isChatHistoryOpen ? null : (
-        <Logo style={{ maxHeight: '25px', marginLeft: '8px' }} />
-      )}
-      <Box />
-      <Stack direction="row" alignItems="center">
-        <NewChatButton />
-        <UserButton />
-      </Stack>
+      <Box display="flex" flexDirection="column" alignItems="flex-start">
+        {isMobile && displayMobileMenu ? (
+          <OpenSideBarMobileButton />
+        ) : isChatHistoryOpen ? null : (
+          <Box flexDirection="column" alignItems="flex-start" display="flex">
+            <Logo style={{ maxHeight: '25px', marginLeft: '8px' }} />
+            {headerTextLeft && (
+              <Typography variant="caption" sx={{ mt: 0, ml: 1 }}>{headerTextLeft}</Typography>
+            )}
+          </Box>
+        )}
+      </Box>
+      <Box display="flex" flexDirection="column" alignItems="flex-end">
+        <Box display="flex" alignItems="center">
+          <NewChatButton />
+          {displayAvatar && <UserButton />}
+        </Box>
+        {headerTextRight && (
+          <Typography variant="caption" sx={{ mt: 0.5, mr: 1 }}>{headerTextRight}</Typography>
+        )}
+      </Box>
     </Box>
   );
 });
