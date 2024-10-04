@@ -35,6 +35,7 @@ const MessageAvatar = ({ author, hide }: Props) => {
     <span className={`message-avatar`}>
       <Tooltip title={author}>
         <Avatar
+          variant="square"
           sx={{
             width: '1.6rem',
             height: '1.6rem',
